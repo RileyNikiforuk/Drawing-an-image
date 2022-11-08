@@ -26,11 +26,26 @@ if ( picWidth >= picHeight ) { // True if Landscape or square
   heightLarger = true;
 }
 //
-//aspect ratio calculations
-if (widthLarger == true) imageWidthRatio = largerDimension / largerDimension;
-if (widthLarger == true) imageHeightRatio = smallerDimension / largerDimension;
-if (heightLarger == true) imageWidthRatio = smallerDimension / largerDimension;
-if (heightLarger == true) imageHeightRatio = largerDimension / largerDimension;
+/*aspect ratio calculations, Older calculations 
+ if (widthLarger == true) imageWidthRatio = largerDimension / largerDimension;
+ if (widthLarger == true) imageHeightRatio = smallerDimension / largerDimension;
+ if (heightLarger == true) imageWidthRatio = smallerDimension / largerDimension;
+ if (heightLarger == true) imageHeightRatio = largerDimension / largerDimension;
+ */
+//
+//Better Image stretch algorithm
+float picWidthAdjusted, picHeightAdjusted;
+//we know the width is the longer dimension
+if ( appWidth >= picWidth ) {
+  picWidthAdjusted = appWidth;
+  //
+  if (widthLarger == true) imageWidthRatio = largerDimension / largerDimension;
+ if (widthLarger == true) imageHeightRatio = smallerDimension / largerDimension;
+ //
+ if (  ) {} else {}
+} else {
+  //image smaller then canvas, needs seperate algorithm
+}
 //Population
 pic = loadImage("../images used/maxresdefault.jpg");
 backgroundImageX = appWidth*0;
@@ -39,9 +54,11 @@ backgroundImageWidth = appWidth-1;
 backgroundImageHeight = appHeight-1;
 //
 // Ajust Image Variables for aspect ratio
-float picWidthAdjusted, picHeightAdjusted;
 picWidthAdjusted = backgroundImageWidth * imageWidthRatio;
 picHeightAdjusted = backgroundImageHeight * imageHeightRatio;
+//
+println( appWidth, picWidth, picWidthAdjusted );
+println( appHeight, picHeight, picHeightAdjusted );
 //Rectangular Layout and Image drawing to canvas
 //rect(backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageHeight);
 //
