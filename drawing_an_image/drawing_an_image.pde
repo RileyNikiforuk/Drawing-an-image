@@ -5,73 +5,103 @@
 //Global Variables
 int appWidth, appHeight;
 float backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageHeight;
-float smallerDimension, largerDimension, imageWidthRatio=0.0, imageHeightRatio=0.0;
-Boolean widthLarger=false, heightLarger=false;
+float picWidthAdjusted=0.0, picHeightAdjusted=0.0;
 PImage pic;
 Boolean nightMode=false;
+int tintDayMode=255, tintDayModeOpacity=50, tintRed=64, tintGreen=64, tintBlue=40, tintNightModeOpacity=85;
 //
-size(1280, 720); //Landscape
-//Copy Display Algorithm from Hello World
-appWidth = width;
-appHeight = height;
-//
-//Aspect Ratio of Background Image
-//Obi-wan-star-wars-jedi-23864621-800-600.jpg
-//Note: Dimensions are found in the image file / Right Click / Properties / Details
-int picWidth = 1280;
-int picHeight = 720;
-//Image Orientation: Landscape, Square, Portrait
-if ( picWidth >= picHeight ) { //True if Landscape or Square
-  largerDimension = picWidth;
-  smallerDimension = picHeight;
-  widthLarger = true;
-} else { //False if Portrait
-  largerDimension = picHeight;
-  smallerDimension = picWidth;
-  heightLarger = true;
-}
-//
-/*Aspect Ratio Calculations, Older Calculations
- if ( widthLarger == true ) imageWidthRatio = largerDimension / largerDimension;
- if ( widthLarger == true ) imageHeightRatio = smallerDimension / largerDimension;
- if ( heightLarger == true ) imageWidthRatio = smallerDimension / largerDimension;
- if ( heightLarger == true ) imageHeightRatio = largerDimension / largerDimension;
- */
-//
-//Better Image Stretch Algorithm
-float picWidthAdjusted=0.0, picHeightAdjusted=0.0;
-//We know the width is the larger dimension
-if ( appWidth >= picWidth ) {
-  picWidthAdjusted = appWidth; //stretching the larger dimension 
+void setup ()
+{
+  size(1280, 720); //Landscape
+  //Copy Display Algorithm from Hello World
+  appWidth = width;
+  appHeight = height;
   //
-  if ( widthLarger == true ) imageWidthRatio = largerDimension / largerDimension;
-  if ( heightLarger == true ) imageWidthRatio = smallerDimension / largerDimension;
+  //Image Dimensions for aspect ratio
+  //maxresdefault.jpg
+  //Note: Dimensions are found in the image file / Right Click / Properties / Details
+  int picWidth = 1280;
+  int picHeight = 720;
   //
-  if ( appHeight >= picHeight ) {
-    //Calculated Dimension b/c smaller than width
-    if ( widthLarger == true ) imageHeightRatio = smallerDimension / largerDimension;
-    if ( heightLarger == true ) imageHeightRatio = largerDimension / largerDimension;
-    picHeightAdjusted = picWidthAdjusted * imageHeightRatio;
-  } else {
-    //Image smaller than CANVAS needs separate algorithm
+  //Image Orientation: Landscape, Square, Portrait
+  float smallerDimension, largerDimension, imageWidthRatio=0.0, imageHeightRatio=0.0;
+  Boolean widthLarger=false, heightLarger=false;
+  if ( picWidth >= picHeight ) { //True if Landscape or Square
+    largerDimension = picWidth;
+    smallerDimension = picHeight;
+    widthLarger = true;
+  } else { //False if Portrait
+    largerDimension = picHeight;
+    smallerDimension = picWidth;
+    heightLarger = true;
   }
-} else {
-  //Image smaller than CANVAS, needs separate algorithm
-}
+  //
+  //Teaching Example: width is known to be larger
+  //Better Image Stretch Algorithm
+  if ( appWidth >= picWidth ) {
+    picWidthAdjusted = appWidth; //stretching the larger dimension 
+    //
+    if ( widthLarger == true ) imageWidthRatio = largerDimension / largerDimension;
+    if ( heightLarger == true ) imageWidthRatio = smallerDimension / largerDimension;
+    //
+    if ( appHeight >= picHeight ) {
+      //Calculated Dimension b/c smaller than width
+      if ( widthLarger == true ) imageHeightRatio = smallerDimension / largerDimension;
+      picHeightAdjusted = picWidthAdjusted * imageHeightRatio;
+      if ( appHeight < picHeightAdjusted ) {
+        println("STOP: image is too big for the CANVAS");
+        exit(); //stop further use of the APP
+      }
+    } else {
+      //Image smaller than CANVAS needs separate algorithm
+      println("CANVAS is smaller than Image");
+    }
+  } else {
+    //Image smaller than CANVAS, needs separate algorithm
+    println("CANVAS is smaller than Image");
+  }
+  //
+  //Population
+  pic = loadImage("../images used/maxresdefault.jpg");
+  backgroundImageX = appWidth*0;
+  backgroundImageY = appHeight*0;
+  backgroundImageWidth = appWidth-1;
+  backgroundImageHeight = appHeight-1;
+  //
+  //Verify Variable values after algorithm
+  println("App Width:", appWidth, "and App Height:", appHeight);
+  println("Image dimensions are:", picWidth, picHeight);
+  println("Larger Image dimensions is:", largerDimension);
+  println("Adjusted Image dimensions are (stretch is goal):", picWidthAdjusted, picHeightAdjusted);
+  //
+  //Rectangular Layout and Image Drawing to CANVAS
+  //rect( backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageHeight );
+  //
+  //Background image must be single executed code
+  if ( nightMode == false ) tint(tintDayMode, tintDayModeOpacity); //Gray Scale, Day use: use 1/2 tint value for white (i.e. 128/256=1/2)
+  if ( nightMode == true ) tint(tintRed, tintGreen, tintBlue, tintNightModeOpacity); //RGB: Night Mode
+  image( pic, backgroundImageX, backgroundImageY, picWidthAdjusted, picHeightAdjusted);
+}//End setup
 //
-//Population
-pic = loadImage("../images used/maxresdefault.jpg");
-backgroundImageX = appWidth*0;
-backgroundImageY = appHeight*0;
-backgroundImageWidth = appWidth-1;
-backgroundImageHeight = appHeight-1;
+void draw () {}//End draw
 //
-println( appWidth, picWidth, picWidthAdjusted );
-println( appHeight, picHeight, picHeightAdjusted );
+void keyPressed () {}//End keyPressed
 //
-//Rectangular Layout and Image Drawing to CANVAS
-//rect( backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageHeight );
+void mousePressed () {
+  //
+  //Mouse pressed will control background image
+  if ( mouseButton == LEFT ) {
+    nightMode = true;
+    rect( backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageHeight );
+    tint(tintRed, tintGreen, tintBlue, tintNightModeOpacity); //RGB: Night Mode
+    image( pic, backgroundImageX, backgroundImageY, picWidthAdjusted, picHeightAdjusted );
+  }
+  if ( mouseButton == RIGHT ) {
+    nightMode = false;
+    rect( backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageHeight );
+    tint(tintDayMode, tintDayModeOpacity); //Gray Scale, Day use: use 1/2 tint value for white (i.e. 128/256=1/2)
+    image( pic, backgroundImageX, backgroundImageY, picWidthAdjusted, picHeightAdjusted );
+  }
+}//End mousePressed
 //
-if ( nightMode == false ) tint(255, 64); //Gray Scale, Day use: use 1/2 tint value for white (i.e. 128/256=1/2)
-if ( nightMode == true ) tint(64, 64, 40); //RGB: Night Mode
-image( pic, backgroundImageX, backgroundImageY, picWidthAdjusted, picHeightAdjusted);
+//End Main Program
