@@ -8,30 +8,34 @@ float backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageH
 float topX, topY, topWidth, topHeight;
 float bottomX, bottomY, bottomWidth, bottomHeight;
 float picWidthAdjusted=0.0, picHeightAdjusted=0.0;
-PImage pic;
+float picWidthAdjusted2=0.0, picHeightAdjusted2=0.0;
+float picWidthAdjusted3=0.0, picHeightAdjusted3=0.0;
+PImage pic, pic2, pic3;
 Boolean nightMode=false;
 int tintDayMode=255, tintDayModeOpacity=50, tintRed=64, tintGreen=64, tintBlue=40, tintNightModeOpacity=85;
 //
-void setup ()
+void setup()
 {
   size(1280, 720); //Landscape
   //Copy Display Algorithm from Hello World
   appWidth = width;
   appHeight = height;
   //
-  //Image Dimensions for aspect ratio
-  //maxresdefault.jpg
+  //Image Dimensions for Aspect Ratio
+  //Obi-wan-star-wars-jedi-23864621-800-600.jpg
   //Note: Dimensions are found in the image file / Right Click / Properties / Details
   int picWidth = 1280;
   int picHeight = 720;
-  int picWidth2 = ;
-  int picHeight2 = ;
-  //int picWidth3 = ;
-  //int picHeight3 = ;
+  int picWidth2 = 1920;
+  int picHeight2 = 1080;
+  //int picWidth3 = 2121;
+  //int picHeight3 = 3771;
   //
   //Image Orientation: Landscape, Square, Portrait
   float smallerDimension, largerDimension, imageWidthRatio=0.0, imageHeightRatio=0.0;
-  Boolean widthLarger=false, heightLarger=false;
+  float smallerDimension2, largerDimension2, imageWidthRatio2=0.0, imageHeightRatio2=0.0;
+  float smallerDimension3, largerDimension3, imageWidthRatio3=0.0, imageHeightRatio3=0.0;
+  Boolean widthLarger=false, heightLarger=false, widthLarger2=false, heightLarger2=false;
   if ( picWidth >= picHeight ) { //True if Landscape or Square
     largerDimension = picWidth;
     smallerDimension = picHeight;
@@ -41,21 +45,36 @@ void setup ()
     smallerDimension = picWidth;
     heightLarger = true;
   }
+  if ( picWidth2 >= picHeight2 ) { //True if Landscape or Square
+    largerDimension2 = picWidth2;
+    smallerDimension2 = picHeight2;
+    widthLarger2 = true;
+    //Landscape Image larger image to smaller rectangle (or larger)
+    picWidthAdjusted2 = picWidth2; //stretch or reduce
+    imageHeightRatio2 = smallerDimension2 / largerDimension;
+    picHeightAdjusted2 = picWidthAdjusted * imageHeightRatio2;
+    println("here", picWidthAdjusted2, picHeightAdjusted2);
+  } else { //False if Portrait
+    largerDimension2 = picHeight2;
+    smallerDimension2 = picWidth2;
+    heightLarger2 = true;
+    //Portrait Image larger image to smaller rectangle (or larger)
+    println("here, else");
+  }
   //
   //Teaching Example: width is known to be larger
   //Better Image Stretch Algorithm
   if ( appWidth >= picWidth ) {
-    picWidthAdjusted = appWidth; //stretching the larger dimension 
+    picWidthAdjusted = appWidth; //Stretching larger dimension
     //
     if ( widthLarger == true ) imageWidthRatio = largerDimension / largerDimension;
-    if ( heightLarger == true ) imageWidthRatio = smallerDimension / largerDimension;
     //
     if ( appHeight >= picHeight ) {
       //Calculated Dimension b/c smaller than width
       if ( widthLarger == true ) imageHeightRatio = smallerDimension / largerDimension;
       picHeightAdjusted = picWidthAdjusted * imageHeightRatio;
       if ( appHeight < picHeightAdjusted ) {
-        println("STOP: image is too big for the CANVAS");
+        println("STOP: image is too big for CANVAS");
         exit(); //stop further use of the APP
       }
     } else {
@@ -69,54 +88,61 @@ void setup ()
   //
   //Population
   pic = loadImage("../images used/landscape/maxresdefault.jpg");
+  pic2 = loadImage("../images used/landscape/stage-1-toyota-supra-turbo-is-just-a-slammed-appetizer-for-crazy-widebody-ideas-178819_1.jpg");
+  pic3 = loadImage("../images used/portrait/pexels-supreet-8359052.jpg");
   backgroundImageX = appWidth*0;
   backgroundImageY = appHeight*0;
   backgroundImageWidth = appWidth-1;
   backgroundImageHeight = appHeight-1;
-  topX = appWidth*1/4; 
-  topY = appHeight*1/20; 
-  topWidth = appWidth*1/2;
-  topHeight = appHeight*13/20;
-  bottomX = appWidth*2/4;
-  bottomY = appHeight*15/20;
-  bottomWidth = appWidth*1/4;
-  bottomHeight = appHeight*4/20;
+  topX = appWidth * 1/4;
+  topY = appHeight * 1/20;
+  topWidth = appWidth * 1/2;
+  topHeight = appHeight * 13/20;
+  bottomX = appWidth *1/2;
+  bottomY = appHeight * 3/4;
+  bottomWidth = appWidth * 1/4;
+  bottomHeight = appHeight * 4/20;
   //
-  //Verify Variable values after algorithm
-  println("App Width:", appWidth, "and App Height:", appHeight);
+  //Verify Variable Values after Algorithm
+  println("App Width:", appWidth, " and App Height:", appHeight);
   println("Image dimensions are:", picWidth, picHeight);
-  println("Larger Image dimensions is:", largerDimension);
-  println("Adjusted Image dimensions are (stretch is goal):", picWidthAdjusted, picHeightAdjusted);
+  println("Larger Image dimension is:", largerDimension);
+  println("Adjusted Image dimesnions are (stretch is goal):", picWidthAdjusted, picHeightAdjusted);
   //
   //Rectangular Layout and Image Drawing to CANVAS
   //rect( backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageHeight );
   rect( topX, topY, topWidth, topHeight );
   rect( bottomX, bottomY, bottomWidth, bottomHeight );
   //
-  //Background image must be single executed code
+  //Background Image must be single executed code
   if ( nightMode == false ) tint(tintDayMode, tintDayModeOpacity); //Gray Scale, Day use: use 1/2 tint value for white (i.e. 128/256=1/2)
   if ( nightMode == true ) tint(tintRed, tintGreen, tintBlue, tintNightModeOpacity); //RGB: Night Mode
   image( pic, backgroundImageX, backgroundImageY, picWidthAdjusted, picHeightAdjusted);
 }//End setup
 //
-void draw () {}//End draw
+void draw()
+{
+  image(pic2, topX, topY, picWidthAdjusted2, picHeightAdjusted2);
+  image(pic3, bottomX, bottomY, bottomWidth, bottomHeight); 
+}//End draw
 //
-void keyPressed () {}//End keyPressed
+void keyPressed() {
+}//End keyPressed
 //
-void mousePressed () {
-  //
-  //Mouse pressed will control background image
-  if ( mouseButton == LEFT ) {
+void mousePressed() {
+  //  
+  //Mouse Pressed will control background image
+  if ( mouseButton == LEFT) {
     nightMode = true;
     rect( backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageHeight );
-    tint(tintRed, tintGreen, tintBlue, tintNightModeOpacity); //RGB: Night Mode
-    image( pic, backgroundImageX, backgroundImageY, picWidthAdjusted, picHeightAdjusted );
+    tint(64, 64, 40, 85); //RGB: Night Mode
+    image( pic, backgroundImageX, backgroundImageY, picWidthAdjusted, picHeightAdjusted);
   }
   if ( mouseButton == RIGHT ) {
     nightMode = false;
     rect( backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageHeight );
-    tint(tintDayMode, tintDayModeOpacity); //Gray Scale, Day use: use 1/2 tint value for white (i.e. 128/256=1/2)
-    image( pic, backgroundImageX, backgroundImageY, picWidthAdjusted, picHeightAdjusted );
+    tint(255, 50); //Gray Scale: use 1/2 tint value for white (i.e. 128/256=1/2)
+    image(pic, backgroundImageX, backgroundImageY, picWidthAdjusted, picHeightAdjusted);
   }
 }//End mousePressed
 //
