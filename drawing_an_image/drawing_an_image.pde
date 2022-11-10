@@ -5,6 +5,8 @@
 //Global Variables
 int appWidth, appHeight;
 float backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageHeight;
+float topX, topY, topWidth, topHeight;
+float bottomX, bottomY, bottomWidth, bottomHeight;
 float picWidthAdjusted=0.0, picHeightAdjusted=0.0;
 PImage pic;
 Boolean nightMode=false;
@@ -22,6 +24,10 @@ void setup ()
   //Note: Dimensions are found in the image file / Right Click / Properties / Details
   int picWidth = 1280;
   int picHeight = 720;
+  int picWidth2 = ;
+  int picHeight2 = ;
+  //int picWidth3 = ;
+  //int picHeight3 = ;
   //
   //Image Orientation: Landscape, Square, Portrait
   float smallerDimension, largerDimension, imageWidthRatio=0.0, imageHeightRatio=0.0;
@@ -62,11 +68,19 @@ void setup ()
   }
   //
   //Population
-  pic = loadImage("../images used/maxresdefault.jpg");
+  pic = loadImage("../images used/landscape/maxresdefault.jpg");
   backgroundImageX = appWidth*0;
   backgroundImageY = appHeight*0;
   backgroundImageWidth = appWidth-1;
   backgroundImageHeight = appHeight-1;
+  topX = appWidth*1/4; 
+  topY = appHeight*1/20; 
+  topWidth = appWidth*1/2;
+  topHeight = appHeight*13/20;
+  bottomX = appWidth*2/4;
+  bottomY = appHeight*15/20;
+  bottomWidth = appWidth*1/4;
+  bottomHeight = appHeight*4/20;
   //
   //Verify Variable values after algorithm
   println("App Width:", appWidth, "and App Height:", appHeight);
@@ -76,6 +90,8 @@ void setup ()
   //
   //Rectangular Layout and Image Drawing to CANVAS
   //rect( backgroundImageX, backgroundImageY, backgroundImageWidth, backgroundImageHeight );
+  rect( topX, topY, topWidth, topHeight );
+  rect( bottomX, bottomY, bottomWidth, bottomHeight );
   //
   //Background image must be single executed code
   if ( nightMode == false ) tint(tintDayMode, tintDayModeOpacity); //Gray Scale, Day use: use 1/2 tint value for white (i.e. 128/256=1/2)
